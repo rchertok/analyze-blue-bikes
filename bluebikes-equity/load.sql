@@ -36,11 +36,12 @@ SET mean_household_income = NULLIF(@inc, ''),
 LOAD DATA LOCAL INFILE 'data/station.csv' INTO TABLE station
 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 LINES
 (station_id, station_name, lat, lon, municipality, @nbhd, @docks, in_city_station_file, @first_trip, @prot,
- station_cohort, is_new_station, trips_jul_sep_2026, avg_daily_trips)
+ station_cohort, is_new_station, trips_jul_sep_2026, @avg_daily)
 SET neighborhood_id          = NULLIF(@nbhd, ''),
     total_docks              = NULLIF(@docks, ''),
     first_trip_in_data       = NULLIF(@first_trip, ''),
-    nearest_protected_lane_m = NULLIF(@prot, '');
+    nearest_protected_lane_m = NULLIF(@prot, ''),
+    avg_daily_trips          = NULLIF(@avg_daily, '');
 
 -- trips: uses the 100k sample by default
 -- for the full 1.66M trips, unzip trip_full.zip into data/ and change the file name to data/trip.csv

@@ -16,6 +16,14 @@ mysql --local-infile=1 -u root -p < load.sql
 
 The last thing load.sql prints is a row count for every table. If any of them say 0, something went wrong, so check the error above it.
 
+**If load.sql fails with "Loading local data is disabled":** the MySQL server has file loading turned off (it's off by default). Run this once, then run load.sql again. It resets when MySQL restarts, so you may need it again later.
+
+```
+mysql -u root -p -e "SET GLOBAL local_infile = 1;"
+```
+
+**If you get "command not found: mysql" on a Mac:** the MySQL installer doesn't add it to your PATH. Use the full path `/usr/local/mysql/bin/mysql` in place of `mysql` above.
+
 **If you use MySQL Workbench instead of the terminal:** edit your connection, go to Advanced, and put `OPT_LOCAL_INFILE=1` in the Others box. Then in load.sql, replace every `'data/` with the full path to this folder's data folder, like `'/Users/you/bluebikes-equity/data/`. Windows paths need forward slashes.
 
 ## Trips: sample vs full
