@@ -22,7 +22,7 @@ CREATE TABLE facility_type (
     facility_code        VARCHAR(12) PRIMARY KEY,    -- code used in the city's bike network file
     facility_description VARCHAR(80) NOT NULL,
     protection_level     ENUM('protected','painted','shared','other') NOT NULL,
-    is_protected         TINYINT(1) NOT NULL
+    is_protected         TINYINT    NOT NULL
 );
 
 -- ---------- neighborhoods ----------
@@ -66,11 +66,11 @@ CREATE TABLE station (
     municipality             VARCHAR(30) NOT NULL,
     neighborhood_id          INT NULL,               -- NULL for stations outside Boston
     total_docks              SMALLINT NULL,          -- NULL for stations missing from the city station file
-    in_city_station_file     TINYINT(1) NOT NULL,
+    in_city_station_file     TINYINT    NOT NULL,
     first_trip_in_data       DATE NULL,
     nearest_protected_lane_m INT NULL,
     station_cohort           ENUM('before_jul_2025','aug_sep_2025','after_sep_2025','inactive') NOT NULL,  -- when the station first shows up in trip data
-    is_new_station           TINYINT(1) NOT NULL,    -- 1 = after_sep_2025 (no trips at all in Jul to Sep 2025)
+    is_new_station           TINYINT    NOT NULL,    -- 1 = after_sep_2025 (no trips at all in Jul to Sep 2025)
     trips_jul_sep_2026       INT NOT NULL,           -- starts + ends from the FULL trip data, not the sample
     avg_daily_trips          DECIMAL(7,2) NULL,      -- trips_jul_sep_2026 / days since first trip in window (NULL for inactive stations)
     FOREIGN KEY (neighborhood_id) REFERENCES neighborhood(neighborhood_id)
@@ -125,10 +125,10 @@ CREATE TABLE mbta_stop (
     lon                 DECIMAL(9,6) NOT NULL,
     municipality        VARCHAR(30),
     primary_mode        ENUM('rapid_transit','commuter_rail','ferry','bus') NOT NULL,
-    has_rapid_transit   TINYINT(1) NOT NULL,
-    has_commuter_rail   TINYINT(1) NOT NULL,
-    has_bus             TINYINT(1) NOT NULL,
-    has_ferry           TINYINT(1) NOT NULL,
+    has_rapid_transit   TINYINT    NOT NULL,
+    has_commuter_rail   TINYINT    NOT NULL,
+    has_bus             TINYINT    NOT NULL,
+    has_ferry           TINYINT    NOT NULL,
     n_routes            SMALLINT NOT NULL,
     wheelchair_boarding TINYINT NOT NULL
 );

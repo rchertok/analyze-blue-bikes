@@ -61,8 +61,13 @@ LOAD DATA LOCAL INFILE 'data/station_lane.csv' INTO TABLE station_lane
 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 LINES;
 
 -- MBTA
+-- a few stops have more than 6 decimals in lat/lon, so round them explicitly
 LOAD DATA LOCAL INFILE 'data/mbta_stop.csv' INTO TABLE mbta_stop
-FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 LINES;
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 LINES
+(stop_id, stop_name, @lat, @lon, municipality, primary_mode, has_rapid_transit, has_commuter_rail,
+ has_bus, has_ferry, n_routes, wheelchair_boarding)
+SET lat = ROUND(@lat, 6),
+    lon = ROUND(@lon, 6);
 
 LOAD DATA LOCAL INFILE 'data/station_mbta_access.csv' INTO TABLE station_mbta_access
 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 LINES;
