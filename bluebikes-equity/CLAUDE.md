@@ -38,11 +38,11 @@ The CSVs in data/ were built in a separate Claude chat from raw files we downloa
 ## Cleaning approach
 Don't delete or edit rows in the base tables. Put all cleaning in views in clean_views.sql (run after load.sql) so the raw data stays intact and every filter is visible for the writeup.
 
-Planned views:
-- v_station_active: stations excluding X32999 and BCBS01
-- v_trip_clean: trips where both stations are in v_station_active, plus is_round_trip, a distance bucket (under 1km, 1 to 2km, 2 to 3km, 3 to 5km, 5km+), duration in minutes, hour, weekday flag, and the start station's neighborhood_id
-- v_station_ridership: per station starts, ends, total trips, and a ridership quartile among Boston stations
-- v_recent_crash: crashes from 2023-01-01 onward
+Views (built, see clean_views.sql comments for every column):
+- v_station_active: stations excluding X32999, BCBS01, and the 14 inactive stations (no 2026 trips). 620 stations, 355 in Boston.
+- v_trip_clean: trips where both stations are in v_station_active (99,990), plus is_round_trip (same start and end station, which catches 29 same-station trips with distance_m > 0), distance_bucket ('round trip', under 1km, 1 to 2km, 2 to 3km, 3 to 5km, 5km+) with distance_bucket_order, duration_min, start_hour, is_weekday, bike/rider type names, and start/end municipality and neighborhood_id
+- v_station_ridership: per station sample starts, ends, total from v_trip_clean, plus full-data trips_jul_sep_2026 and avg_daily_trips. ridership_quartile is among Boston stations by trips_jul_sep_2026 (full data, not the sample), 4 = busiest, NULL outside Boston.
+- v_recent_crash: crashes from 2023-01-01 onward (1,245)
 
 ## Per-question plan
 1. Residents per station vs income: neighborhood LEFT JOIN v_station_active (so 0-station neighborhoods still show) joined to neighborhood_demographics. Exclude Harbor Islands.

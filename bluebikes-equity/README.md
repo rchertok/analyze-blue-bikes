@@ -12,9 +12,12 @@ We connect Bluebikes stations and trips to Boston neighborhoods, MBTA stops, the
 ```
 mysql --local-infile=1 -u root -p < schema.sql
 mysql --local-infile=1 -u root -p < load.sql
+mysql -u root -p < clean_views.sql
 ```
 
-The last thing load.sql prints is a row count for every table. If any of them say 0, something went wrong, so check the error above it.
+The last thing load.sql prints is a row count for every table. If any of them say 0, something went wrong, so check the error above it. clean_views.sql does the same for the views (v_station_active 620, v_trip_clean 99,990, v_station_ridership 620, v_recent_crash 1,245).
+
+**Write queries against the `v_` views, not the raw tables.** They already drop the depot, the Hingham station, and inactive stations, and add things like distance buckets, round-trip flags, and ridership quartiles. See the comments in clean_views.sql for what each column means.
 
 **If load.sql fails with "Loading local data is disabled":** the MySQL server has file loading turned off (it's off by default). Run this once, then run load.sql again. It resets when MySQL restarts, so you may need it again later.
 
