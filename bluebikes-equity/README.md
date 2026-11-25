@@ -27,7 +27,7 @@ The last thing load.sql prints is a row count for every table. If any of them sa
 | Table | What it is | Rows |
 |---|---|---|
 | neighborhood | Boston's 24 neighborhoods | 24 |
-| neighborhood_demographics | census population, income, car ownership (coming soon) | 0 |
+| neighborhood_demographics | ACS 2020-2024 population, income, car ownership, poverty, commute mode | 24 |
 | station | Bluebikes stations, with neighborhood, distance to nearest protected lane, station age cohort, and avg daily trips | 636 |
 | trip | Bluebikes trips (sample) | 100,000 |
 | bike_type | classic or electric | 2 |
@@ -57,8 +57,9 @@ Put each query in `queries/` as its own file (`q1_station_access.sql`, etc.). Co
 - Bluebikes System Data (trips): bluebikes.com/system-data
 - Analyze Boston: Blue Bike Stations, Existing Bike Network (2022), Vision Zero Crash Records, Neighborhood Boundaries Approximated by 2020 Census Tracts
 - MBTA GTFS feed
-- U.S. Census American Community Survey 5-year estimates (coming soon)
+- U.S. Census American Community Survey 2020-2024 5-year estimates (via the Census API)
+- Analyze Boston: 2020 Census Tracts in Boston
 
 ## How we used AI
 
-Claude did the data cleaning and built the tables from the raw files we downloaded. That included the spatial joins (matching stations to neighborhoods, lanes, MBTA stops, and crashes) and writing the schema and load scripts. We picked the topic, data sources, and research questions, decided what to keep and what to filter, and checked the results.
+Claude did the data cleaning, rolled census tracts up to neighborhoods, and built the tables from the raw files we downloaded. That included the spatial joins (matching stations to neighborhoods, lanes, MBTA stops, and crashes) and writing the schema and load scripts. We picked the topic, data sources, and research questions, decided what to keep and what to filter, and checked the results.

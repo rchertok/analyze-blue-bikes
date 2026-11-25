@@ -33,16 +33,26 @@ CREATE TABLE neighborhood (
     area_sq_km        DECIMAL(6,2) NOT NULL
 );
 
--- census data, filled in once the ACS + tract files are processed
+-- census ACS data rolled up from tracts to neighborhoods
 CREATE TABLE neighborhood_demographics (
     neighborhood_id         INT PRIMARY KEY,
-    acs_year                SMALLINT NOT NULL,
-    population              INT,
-    households              INT,
-    aggregate_income        BIGINT,
-    mean_household_income   INT,
-    no_vehicle_households   INT,
-    pct_no_vehicle          DECIMAL(5,2),
+    acs_year                SMALLINT NOT NULL,       -- ACS 5-year 2020-2024
+    n_tracts                SMALLINT NOT NULL,
+    population              INT NOT NULL,            -- includes people in dorms and other group quarters
+    households              INT NOT NULL,
+    aggregate_income        BIGINT NOT NULL,
+    mean_household_income   INT NULL,                -- aggregate_income / households (NULL if no households)
+    no_vehicle_households   INT NOT NULL,
+    pct_no_vehicle          DECIMAL(5,2) NULL,
+    poverty_universe        INT NOT NULL,
+    below_poverty           INT NOT NULL,
+    pct_below_poverty       DECIMAL(5,2) NULL,
+    workers                 INT NOT NULL,
+    transit_commuters       INT NOT NULL,
+    bike_commuters          INT NOT NULL,
+    pct_commute_transit     DECIMAL(5,2) NULL,
+    pct_commute_bike        DECIMAL(5,2) NULL,
+    pop_density_per_sq_km   INT NOT NULL,
     FOREIGN KEY (neighborhood_id) REFERENCES neighborhood(neighborhood_id)
 );
 

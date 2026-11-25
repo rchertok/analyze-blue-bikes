@@ -21,7 +21,16 @@ FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n' IGN
 LOAD DATA LOCAL INFILE 'data/neighborhood.csv' INTO TABLE neighborhood
 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 LINES;
 
--- neighborhood_demographics: load line goes here once the census table is built
+LOAD DATA LOCAL INFILE 'data/neighborhood_demographics.csv' INTO TABLE neighborhood_demographics
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 LINES
+(neighborhood_id, acs_year, n_tracts, population, households, aggregate_income, @inc,
+ no_vehicle_households, @pnv, poverty_universe, below_poverty, @ppov, workers, transit_commuters,
+ bike_commuters, @ptr, @pbike, pop_density_per_sq_km)
+SET mean_household_income = NULLIF(@inc, ''),
+    pct_no_vehicle        = NULLIF(@pnv, ''),
+    pct_below_poverty     = NULLIF(@ppov, ''),
+    pct_commute_transit   = NULLIF(@ptr, ''),
+    pct_commute_bike      = NULLIF(@pbike, '');
 
 -- stations (empty cells become NULL)
 LOAD DATA LOCAL INFILE 'data/station.csv' INTO TABLE station
@@ -70,6 +79,7 @@ SELECT 'bike_type' AS tbl, COUNT(*) AS n FROM bike_type
 UNION ALL SELECT 'rider_type', COUNT(*) FROM rider_type
 UNION ALL SELECT 'facility_type', COUNT(*) FROM facility_type
 UNION ALL SELECT 'neighborhood', COUNT(*) FROM neighborhood
+UNION ALL SELECT 'neighborhood_demographics', COUNT(*) FROM neighborhood_demographics
 UNION ALL SELECT 'station', COUNT(*) FROM station
 UNION ALL SELECT 'trip', COUNT(*) FROM trip
 UNION ALL SELECT 'bike_lane_segment', COUNT(*) FROM bike_lane_segment

@@ -20,12 +20,14 @@ The CSVs in data/ were built in a separate Claude chat from raw files we downloa
 - Neighborhoods: Analyze Boston boundaries approximated by 2020 census tracts. Stations assigned by point-in-polygon.
 - Bike lanes: Analyze Boston Existing Bike Network 2022. facility_type maps the ExisFacil codes to protected / painted / shared / other. SUPM meaning is uncertain, treated as a shared use path (protected). station_lane = segments within 100m. station.nearest_protected_lane_m precomputed.
 - MBTA: GTFS. Platforms collapsed into parent stations. Only stops within 1km of a Bluebikes station kept. Mode flags come from routes actually served. station_mbta_access = stops within 400m.
+- Census: ACS 2020-2024 5-year, tract level for Suffolk County, pulled from the Census API. Each of Boston's 207 2020 tracts was assigned to a neighborhood by its internal point (one zero-population tract near Logan fell outside every polygon and was dropped). Counts are summed per neighborhood and percents recomputed from the sums. mean_household_income = aggregate income / households (median can't be summed across tracts). Tracts with no households had a Census null code for income, set to 0.
 - Crashes: Vision Zero, mode_type = 'bike' only, timestamps converted from UTC to Boston local time. nearest_station_id is the closest current station.
 
 ## Known data issues
 - Neighborhoods, lanes, and crashes only cover the City of Boston. Equity, lane, and safety queries must filter to municipality = 'Boston'.
 - X32999 is a Bluebikes depot (153 trips). BCBS01 is a corporate station in Hingham (2 trips). Exclude both from ridership.
-- Harbor Islands neighborhood has no stations and almost no residents. Exclude it from per-capita comparisons.
+- Harbor Islands neighborhood has no stations, 29 residents, and 0 households. Exclude it from every demographic comparison.
+- Population includes dorms and other group quarters. Longwood (5,317 people, 283 households) and student-heavy Fenway, Allston, and Mission Hill look more crowded per station and poorer than their permanent residents. Consider households as a second denominator.
 - About 3.5% of trips are round trips (distance_m = 0). Exclude for trip length questions, keep for ridership counts.
 - Trip counts in the sample are about 1/16.6 of real counts. Prefer percentages, averages, and rankings in query output.
 - Bike lane data is from 2022, so lanes built 2023 to 2026 are missing.
@@ -43,7 +45,7 @@ Planned views:
 - v_recent_crash: crashes from 2023-01-01 onward
 
 ## Per-question plan
-1. Residents per station vs income: neighborhood LEFT JOIN v_station_active (so 0-station neighborhoods still show) joined to neighborhood_demographics. Exclude Harbor Islands. Blocked until neighborhood_demographics is loaded (waiting on census ACS JSON and the 2020 tracts file).
+1. Residents per station vs income: neighborhood LEFT JOIN v_station_active (so 0-station neighborhoods still show) joined to neighborhood_demographics. Exclude Harbor Islands.
 2. Share of trips starting or ending near the T: v_trip_clean with EXISTS subqueries on station_mbta_access joined to mbta_stop where has_rapid_transit = 1. Report all trips and Boston-only.
 3. High ridership stations with no protected lane nearby but recent crashes: Boston stations in the top ridership quartile from v_station_ridership, nearest_protected_lane_m > 100, joined to v_recent_crash where nearest_station_m <= 150. Good candidate for a stored procedure that takes the distance thresholds as parameters.
 4. E-bike usage by neighborhood and trip length: v_trip_clean, Boston start stations only, exclude round trips, group by neighborhood and distance bucket, report percent e-bike.
