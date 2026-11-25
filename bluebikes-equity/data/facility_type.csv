@@ -1,0 +1,17 @@
+facility_code,facility_description,protection_level,is_protected
+SBL,Separated bike lane,protected,1
+SBLBL,"Separated bike lane one side, bike lane other side",protected,1
+SBLSL,"Separated bike lane one side, shared lane markings other side",protected,1
+CFSBL,Contraflow separated bike lane,protected,1
+SUP,Shared use path,protected,1
+SUPM,Shared use path (SUPM variant),protected,1
+SUPN,"Shared use path, natural surface",protected,1
+BL,Bike lane,painted,0
+BFBL,Buffered bike lane,painted,0
+BLSL,"Bike lane one side, shared lane markings other side",painted,0
+BL-PEAKBUS,"Bike lane, shared with buses at peak hours",painted,0
+CFBL,Contraflow bike lane,painted,0
+SLM,Shared lane markings (sharrows),shared,0
+SLMTC,"Shared lane markings, traffic calmed street",shared,0
+WALK,Walk your bike zone,other,0
+PED,Pedestrian path,other,0
