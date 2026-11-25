@@ -59,6 +59,10 @@ CREATE TABLE station (
     in_city_station_file     TINYINT(1) NOT NULL,
     first_trip_in_data       DATE NULL,
     nearest_protected_lane_m INT NULL,
+    station_cohort           ENUM('before_jul_2025','aug_sep_2025','after_sep_2025','inactive') NOT NULL,  -- when the station first shows up in trip data
+    is_new_station           TINYINT(1) NOT NULL,    -- 1 = after_sep_2025 (no trips at all in Jul to Sep 2025)
+    trips_jul_sep_2026       INT NOT NULL,           -- starts + ends from the FULL trip data, not the sample
+    avg_daily_trips          DECIMAL(7,2) NOT NULL,  -- trips_jul_sep_2026 / days since first trip in window
     FOREIGN KEY (neighborhood_id) REFERENCES neighborhood(neighborhood_id)
 );
 

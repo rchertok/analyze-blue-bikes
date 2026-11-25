@@ -28,7 +28,7 @@ The last thing load.sql prints is a row count for every table. If any of them sa
 |---|---|---|
 | neighborhood | Boston's 24 neighborhoods | 24 |
 | neighborhood_demographics | census population, income, car ownership (coming soon) | 0 |
-| station | Bluebikes stations, with neighborhood and distance to nearest protected lane | 636 |
+| station | Bluebikes stations, with neighborhood, distance to nearest protected lane, station age cohort, and avg daily trips | 636 |
 | trip | Bluebikes trips (sample) | 100,000 |
 | bike_type | classic or electric | 2 |
 | rider_type | member or casual | 2 |

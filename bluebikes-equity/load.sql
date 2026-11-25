@@ -26,7 +26,8 @@ FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n' IGN
 -- stations (empty cells become NULL)
 LOAD DATA LOCAL INFILE 'data/station.csv' INTO TABLE station
 FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 LINES
-(station_id, station_name, lat, lon, municipality, @nbhd, @docks, in_city_station_file, @first_trip, @prot)
+(station_id, station_name, lat, lon, municipality, @nbhd, @docks, in_city_station_file, @first_trip, @prot,
+ station_cohort, is_new_station, trips_jul_sep_2026, avg_daily_trips)
 SET neighborhood_id          = NULLIF(@nbhd, ''),
     total_docks              = NULLIF(@docks, ''),
     first_trip_in_data       = NULLIF(@first_trip, ''),
