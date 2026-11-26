@@ -13,6 +13,7 @@ We connect Bluebikes stations and trips to Boston neighborhoods, MBTA stops, the
 mysql --local-infile=1 -u root -p < schema.sql
 mysql --local-infile=1 -u root -p < load.sql
 mysql -u root -p < clean_views.sql
+mysql -u root -p < procedures.sql
 ```
 
 The last thing load.sql prints is a row count for every table. If any of them say 0, something went wrong, so check the error above it. clean_views.sql does the same for the views (v_station_active 620, v_trip_clean 99,990, v_station_ridership 620, v_recent_crash 1,245).
